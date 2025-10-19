@@ -12,23 +12,23 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-tickers = ['KO','PEP']
-df = yf.download(tickers, period='3y', auto_adjust=False)
+tickers = ['KO','PEP'] #selecting our stocks, coca-cola and pepsi co
+df = yf.download(tickers, period='3y', auto_adjust=False) #downloading our data
 df = df['Adj Close'].dropna()
-df.plot(subplots=True)
-plt.show()
+df.plot(subplots=True) 
+plt.show() #plotting the historical data
 
-score, p_value, _ = coint(df['KO'],df['PEP'])
+score, p_value, _ = coint(df['KO'],df['PEP']) #applying the cointegration function and getting the score and p_value
 print("score: ",round(score,4))
 print("p-value: ", round(p_value,4))
 
-X = sm.add_constant(df['PEP'])
+X = sm.add_constant(df['PEP']) 
 model = sm.OLS(df['KO'], X).fit()
-beta = model.params[1]
+beta = model.params[1] #getting the slope of the spread equation
 print("Estimated hedge ratio (beta):", round(beta, 4))
 
-spread = df['KO'] - beta * df['PEP']
-spread.plot(title='KO - beta * PEP (Spread)', figsize=(10,6))
+spread = df['KO'] - beta * df['PEP'] #measuring how cointegrate are the stocks
+spread.plot(title='KO - beta * PEP (Spread)', figsize=(10,6)) 
 plt.grid(True)
 plt.show()
 
